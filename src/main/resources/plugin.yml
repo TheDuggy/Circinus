@@ -1,0 +1,7 @@
+name: Circinus
+main: at.theduggy.Main
+version: 0.0.1
+
+commands:
+  circinus:
+    description: Base command for the server-managing plugin Circinus
