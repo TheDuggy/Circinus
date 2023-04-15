@@ -15,7 +15,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <outputFile>D:\programming\java\topics\Minecraft\Plugins\Server\1_19_Paper\plugins\${project.artifactId}-${project.version}.jar</outputFile>
+                    <outputFile>D:\programming\java\topics\Minecraft\Plugins\Server\1_19_4_circinus\plugins\${project.artifactId}-${project.version}.jar</outputFile>
                 </configuration>
                 <executions>
                     <execution>
@@ -35,11 +35,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.19.4-R0.1-SNAPSHOT</version>
+            <groupId>at.theduggy</groupId>
+            <artifactId>circinus-api</artifactId>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 

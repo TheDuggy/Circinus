@@ -30,7 +30,8 @@ public class BaseCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (strings.length == 0){
+        System.out.println("Base: " + Arrays.toString(strings));
+        if (strings.length == 1){
             return new ArrayList<>(commands.keySet());
         } else if (commands.containsKey(strings[0])){
             return commands.get(strings[0]).complete(Arrays.copyOfRange(strings, 1, strings.length), commandSender);
