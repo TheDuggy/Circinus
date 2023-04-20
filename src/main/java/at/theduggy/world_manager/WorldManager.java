@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,12 +18,20 @@ import java.util.stream.Collectors;
 
 public class WorldManager extends BaseCommand.CommandStructure {
 
-    private final HashMap<String, World> custom_worlds = new HashMap<>();
-    private final FileConfiguration config;
+    private final ArrayList<String> custom_worlds = new ArrayList<>();
+    private final Path CUSTOM_WORLDS = new File(Main.getPlugin(Main.class).getDataFolder(), "/saves/").toPath();
+
 
     public WorldManager(String name, String prefix, FileConfiguration config) {
         super(name, prefix);
-        this.config = config;
+        loadWorlds();
+    }
+
+    private void loadWorlds(){
+        for (File f : CUSTOM_WORLDS.toFile().listFiles()) {
+            custom_worlds.add(f.getName());
+            Bukkit.getServer().createWorldCustomStorage(new WorldCreator(f.getName()), f.toPath());
+        }
     }
 
     private boolean worldLoaded(String name){
@@ -42,7 +51,7 @@ public class WorldManager extends BaseCommand.CommandStructure {
 
                 world_name.append(ChatColor.GREEN + world.getName());
 
-                if (!custom_worlds.containsKey(world.getName())){
+                if (!custom_worlds.contains(world.getName())){
                     world_name.append(ChatColor.AQUA + " (DEFAULT)" + ChatColor.GRAY);
                 }
 
@@ -64,7 +73,8 @@ public class WorldManager extends BaseCommand.CommandStructure {
                             if (WorldType.getByName(args[2].toUpperCase()) != null){
                                 WorldCreator worldCreator = new WorldCreator(args[1]);
                                 worldCreator.type(WorldType.getByName(args[2].toUpperCase()));
-                                custom_worlds.put(args[1], Bukkit.getServer().createWorldCustomStorage(worldCreator, new File(Main.getPlugin(Main.class).getDataFolder(), "/saves/").toPath()));
+                                Bukkit.getServer().createWorldCustomStorage(worldCreator, new File(Main.getPlugin(Main.class).getDataFolder(), "/saves/").toPath());
+                                custom_worlds.add(args[1]);
                             } else {
                                 sender.sendMessage(getPREFIX() + ChatColor.RED + "The world-type " + ChatColor.YELLOW + args[2] + ChatColor.RED + " doesn't exist!");
                             }
@@ -78,7 +88,6 @@ public class WorldManager extends BaseCommand.CommandStructure {
 
                 case "teleport" -> {
                     if (args.length == 2) {
-                        sender.sendMessage(custom_worlds.keySet().toString());
                         if (worldLoaded(args[1])){
 
                             Player player = (Player) sender;
